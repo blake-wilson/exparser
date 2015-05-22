@@ -1,4 +1,4 @@
-package eqparser
+package exparser
 
 import (
 	"testing"
