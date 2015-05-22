@@ -1,6 +1,7 @@
 package eqparser
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -71,7 +72,7 @@ func ParseExpr(expr string) []string {
 }
 
 // evaluate postfix expression
-func EvaluatePostfix(expr []string) float64 {
+func EvaluatePostfix(expr []string) (float64, error) {
 	var evalStack []float64
 
 	for i := 0; i < len(expr); i++ {
@@ -87,9 +88,9 @@ func EvaluatePostfix(expr []string) float64 {
 	}
 	if len(evalStack) > 1 {
 		// error
-		return -1
+		return 0, fmt.Errorf("Error evaluatiing postfix expression")
 	}
-	return evalStack[0]
+	return evalStack[0], nil
 }
 
 func isOperator(val string) bool {

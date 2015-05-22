@@ -1,7 +1,6 @@
 package eqparser
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,6 +8,7 @@ import (
 
 func TestParseExpr(t *testing.T) {
 	tokens := ParseExpr("2 + 4 * 7 - 10 ^ 2")
-	assert.Equal(t, -70, EvaluatePostfix(tokens))
-	fmt.Printf("%f", EvaluatePostfix(tokens))
+	res, err := EvaluatePostfix(tokens)
+	assert.Nil(t, err)
+	assert.Equal(t, -70, res)
 }
