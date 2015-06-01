@@ -2,7 +2,6 @@ package exparser
 
 import (
 	"fmt"
-	"math"
 	"strconv"
 
 	"github.com/blake-wilson/exparser/functions"
@@ -198,21 +197,6 @@ func evaluatePostfix(expr []string) (types.AstNode, error) {
 
 func isOperator(val string) bool {
 	return val == "+" || val == "-" || val == "*" || val == "/" || val == "^"
-}
-
-func evaluate(operator string, lhs, rhs float64) float64 {
-	if operator == "+" {
-		return lhs + rhs
-	} else if operator == "-" {
-		return lhs - rhs
-	} else if operator == "*" {
-		return lhs * rhs
-	} else if operator == "/" {
-		return lhs / rhs
-	} else if operator == "^" {
-		return math.Pow(lhs, rhs)
-	}
-	return -1
 }
 
 func isDigit(char uint8) bool {
