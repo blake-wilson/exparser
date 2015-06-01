@@ -15,21 +15,21 @@ var FMap = map[string]func(leftChild, rightChild types.AstNode, ctx *types.Conte
 }
 
 func AddFunction(leftChild, rightChild types.AstNode, ctx *types.Context) float64 {
-	return leftChild.Eval(nil) + rightChild.Eval(nil)
+	return leftChild.Eval(ctx) + rightChild.Eval(ctx)
 }
 
 func SubtractFunction(leftChild, rightChild types.AstNode, ctx *types.Context) float64 {
-	return leftChild.Eval(nil) - rightChild.Eval(nil)
+	return leftChild.Eval(ctx) - rightChild.Eval(ctx)
 }
 
 func MultiplyFunction(leftChild, rightChild types.AstNode, ctx *types.Context) float64 {
-	return leftChild.Eval(nil) * rightChild.Eval(nil)
+	return leftChild.Eval(ctx) * rightChild.Eval(ctx)
 }
 
 func DivideFunction(leftChild, rightChild types.AstNode, ctx *types.Context) float64 {
-	return leftChild.Eval(nil) / rightChild.Eval(nil)
+	return leftChild.Eval(ctx) / rightChild.Eval(ctx)
 }
 
 func PowerFunction(leftChild, rightChild types.AstNode, ctx *types.Context) float64 {
-	return math.Pow(leftChild.Eval(nil), rightChild.Eval(nil))
+	return math.Pow(leftChild.Eval(ctx), rightChild.Eval(ctx))
 }

@@ -50,7 +50,7 @@ func (n *VariableNode) Eval(ctx *Context) float64 {
 		return ctx.variables[n.name]
 	}
 	// Variable did not map to a value
-	return -1
+	return 0
 }
 
 func (n *TerminalNode) Eval(ctx *Context) float64 {
@@ -74,5 +74,15 @@ func NewVariableNode(name string) *VariableNode {
 func NewTerminalNode(value float64) *TerminalNode {
 	return &TerminalNode{
 		value: value,
+	}
+}
+
+func (ctx *Context) AssignVariable(name string, value float64) {
+	ctx.variables[name] = value
+}
+
+func NewContext() *Context {
+	return &Context{
+		variables: make(map[string]float64),
 	}
 }
