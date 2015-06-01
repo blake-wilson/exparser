@@ -22,12 +22,13 @@ var opa = map[string]struct {
 }
 
 // parse an expression and build and AST which can be evaluated
-func ParseExpression(expr string) types.AstNode {
-	return nil
+func EvalExpression(expr string) (types.AstNode, error) {
+	tokens := tokenize(expr)
+	return evaluatePostfix(tokens)
 }
 
 // return a tokenized postfix expression
-func ParseExpr(expr string) []string {
+func tokenize(expr string) []string {
 
 	// stacks for operators and operands
 	var operators []string
@@ -80,7 +81,7 @@ func ParseExpr(expr string) []string {
 }
 
 // evaluate postfix expression
-func EvaluatePostfix(expr []string) (types.AstNode, error) {
+func evaluatePostfix(expr []string) (types.AstNode, error) {
 	var evalStack []types.AstNode
 
 	// slice of the variable names parsed in the expression
