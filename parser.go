@@ -226,10 +226,3 @@ func isLetter(char uint8) bool {
 func isWhitespace(char uint8) bool {
 	return char == ' ' || char == '\t' || char == '\n'
 }
-
-/*
-func isOperator(ch uint8) bool {
-	_, ok := functions.FMap[strconv.Itoa(int(ch))]
-	return ok
-}
-*/
