@@ -6,7 +6,7 @@ import (
 	"github.com/blake-wilson/exparser/types"
 )
 
-var FMap = map[string]func(leftChild, rightChild types.AstNode) float64{
+var FMap = map[string]func(leftChild, rightChild types.AstNode, ctx *types.Context) float64{
 	"+": AddFunction,
 	"-": SubtractFunction,
 	"*": MultiplyFunction,
@@ -14,22 +14,22 @@ var FMap = map[string]func(leftChild, rightChild types.AstNode) float64{
 	"^": PowerFunction,
 }
 
-func AddFunction(leftChild, rightChild types.AstNode) float64 {
+func AddFunction(leftChild, rightChild types.AstNode, ctx *types.Context) float64 {
 	return leftChild.Eval(nil) + rightChild.Eval(nil)
 }
 
-func SubtractFunction(leftChild, rightChild types.AstNode) float64 {
+func SubtractFunction(leftChild, rightChild types.AstNode, ctx *types.Context) float64 {
 	return leftChild.Eval(nil) - rightChild.Eval(nil)
 }
 
-func MultiplyFunction(leftChild, rightChild types.AstNode) float64 {
+func MultiplyFunction(leftChild, rightChild types.AstNode, ctx *types.Context) float64 {
 	return leftChild.Eval(nil) * rightChild.Eval(nil)
 }
 
-func DivideFunction(leftChild, rightChild types.AstNode) float64 {
+func DivideFunction(leftChild, rightChild types.AstNode, ctx *types.Context) float64 {
 	return leftChild.Eval(nil) / rightChild.Eval(nil)
 }
 
-func PowerFunction(leftChild, rightChild types.AstNode) float64 {
+func PowerFunction(leftChild, rightChild types.AstNode, ctx *types.Context) float64 {
 	return math.Pow(leftChild.Eval(nil), rightChild.Eval(nil))
 }

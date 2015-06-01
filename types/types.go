@@ -28,7 +28,7 @@ type FunctionNode struct {
 	leftChild, rightChild AstNode
 
 	// Function which defines what the node does with its children
-	nodeFunc func(leftChild, rightChild AstNode) float64
+	nodeFunc func(leftChild, rightChild AstNode, ctx *Context) float64
 }
 
 type VariableNode struct {
@@ -42,7 +42,7 @@ type TerminalNode struct {
 }
 
 func (n *FunctionNode) Eval(ctx *Context) float64 {
-	return n.nodeFunc(n.leftChild, n.rightChild)
+	return n.nodeFunc(n.leftChild, n.rightChild, ctx)
 }
 
 func (n *VariableNode) Eval(ctx *Context) float64 {
@@ -57,7 +57,7 @@ func (n *TerminalNode) Eval(ctx *Context) float64 {
 	return n.value
 }
 
-func NewFunctionNode(leftChild, rightChild AstNode, nodeFunc func(leftChild, rightChild AstNode) float64) *FunctionNode {
+func NewFunctionNode(leftChild, rightChild AstNode, nodeFunc func(leftChild, rightChild AstNode, ctx *Context) float64) *FunctionNode {
 	return &FunctionNode{
 		leftChild:  leftChild,
 		rightChild: rightChild,

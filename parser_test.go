@@ -11,4 +11,9 @@ func TestParseExpr(t *testing.T) {
 	res, err := EvaluatePostfix(tokens)
 	assert.Nil(t, err)
 	assert.Equal(t, float64(-70), res.Eval(nil))
+
+	tokens = ParseExpr("3 * 10 + 2 + 8 * 9")
+	res, err = EvaluatePostfix(tokens)
+	assert.Nil(t, err)
+	assert.Equal(t, float64(104), res.Eval(nil))
 }
