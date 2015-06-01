@@ -1,7 +1,6 @@
 package exparser
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/blake-wilson/exparser/types"
@@ -29,6 +28,10 @@ func TestVariables(t *testing.T) {
 	ctx.AssignVariable("y", 4)
 	res, err = EvalExpression("x + y")
 	assert.Nil(t, err)
-	fmt.Printf("Context %s\n\n", ctx)
 	assert.Equal(t, float64(7), res.Eval(ctx))
+}
+
+func TestTokenize(t *testing.T) {
+	tokens := tokenize("3*x + 2")
+	assert.Equal(t, []string{"3", "*", "x", "+", "2"}, tokens)
 }

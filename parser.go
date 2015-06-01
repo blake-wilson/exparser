@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"strconv"
-	"strings"
 
 	"github.com/blake-wilson/exparser/functions"
 	"github.com/blake-wilson/exparser/types"
@@ -24,11 +23,66 @@ var opa = map[string]struct {
 // parse an expression and build and AST which can be evaluated
 func EvalExpression(expr string) (types.AstNode, error) {
 	tokens := tokenize(expr)
+	tokens = tokenizePostfix(tokens)
 	return evaluatePostfix(tokens)
 }
 
-// return a tokenized postfix expression
 func tokenize(expr string) []string {
+	// values which start with a number will be parsed into number tokens,
+	// values which start with a letter will be parsed into variable
+	// tokens, and variables which are operators will be parsed into
+	// operator tokens
+	var tokens []string
+	var token string
+	for pos := 0; pos < len(expr); {
+		if isWhitespace(expr[pos]) {
+			pos++
+		}
+		if isDigit(expr[pos]) {
+			token, pos = tokenizeNumber(expr, pos)
+		} else if isLetter(expr[pos]) {
+			token, pos = tokenizeVariable(expr, pos)
+		} else if isOperator(string(expr[pos])) {
+			token, pos = tokenizeOperator(expr, pos)
+		}
+		tokens = append(tokens, token)
+	}
+	return tokens
+}
+
+func tokenizeNumber(expr string, pos int) (string, int) {
+	var res string
+	var i int
+	for i = pos; i < len(expr) && isDigit(expr[i]); i++ {
+		res += string(expr[i])
+	}
+	return res, i
+}
+
+func tokenizeVariable(expr string, pos int) (string, int) {
+	var res string
+	var i int
+	for i = pos; i < len(expr) && (isDigit(expr[i]) || isLetter(expr[i])); i++ {
+		res += string(expr[i])
+	}
+	return res, i
+}
+
+func tokenizeOperator(expr string, pos int) (string, int) {
+	if len(expr) > pos+2 {
+		if isOperator(string(expr[pos])) && !isOperator(string(expr[pos+1])) {
+			return string(expr[pos]), pos + 1
+		} else {
+			// cannot have two operators in a row
+			return "", pos
+		}
+	} else {
+		return string(expr[pos]), pos + 1
+	}
+}
+
+// return a tokenized postfix expression
+func tokenizePostfix(tokens []string) []string {
 
 	// stacks for operators and operands
 	var operators []string
@@ -36,7 +90,7 @@ func tokenize(expr string) []string {
 	// postfix stack
 	var postfix []string
 
-	for _, tok := range strings.Fields(expr) {
+	for _, tok := range tokens {
 		switch tok {
 		case "(":
 			operators = append(operators, tok)
@@ -80,7 +134,7 @@ func tokenize(expr string) []string {
 	return postfix
 }
 
-// evaluate postfix expression
+// Generate an AST based on a postfix expression
 func evaluatePostfix(expr []string) (types.AstNode, error) {
 	var evalStack []types.AstNode
 
@@ -88,6 +142,9 @@ func evaluatePostfix(expr []string) (types.AstNode, error) {
 	var varNames []string
 
 	for i := 0; i < len(expr); i++ {
+		if len(expr[i]) < 1 {
+			continue
+		}
 		if isOperator(expr[i]) {
 			if len(evalStack) < 2 {
 				// cannot pop two elements from stack
@@ -162,6 +219,17 @@ func isDigit(char uint8) bool {
 	return char >= '0' && char <= '9'
 }
 
-func isLetter(ch uint8) bool {
-	return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')
+func isLetter(char uint8) bool {
+	return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')
 }
+
+func isWhitespace(char uint8) bool {
+	return char == ' ' || char == '\t' || char == '\n'
+}
+
+/*
+func isOperator(ch uint8) bool {
+	_, ok := functions.FMap[strconv.Itoa(int(ch))]
+	return ok
+}
+*/
