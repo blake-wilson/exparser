@@ -14,11 +14,7 @@ type Context struct {
 	variables map[string]float64
 }
 
-// Ast which is composed of AstNodes and evaluated
-type Ast struct {
-	nodes []*AstNode
-}
-
+// AstNodes are the structures used to build an AST
 type AstNode interface {
 	// Function to evaluate the AST Node
 	Eval(ctx *Context) float64
