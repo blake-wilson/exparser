@@ -188,7 +188,7 @@ func evaluatePostfix(expr []string) (types.AstNode, error) {
 			evalStack = append(evalStack, node)
 		}
 	}
-	if len(evalStack) > 1 {
+	if len(evalStack) > 1 || len(evalStack) == 0 {
 		// error
 		return nil, fmt.Errorf("Error evaluating postfix expression")
 	}
