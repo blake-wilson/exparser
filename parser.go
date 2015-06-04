@@ -37,12 +37,18 @@ func tokenize(expr string) []string {
 		if isWhitespace(expr[pos]) {
 			pos++
 		}
-		if isDigit(expr[pos]) {
+		if isParenthesis(expr[pos]) {
+			//make a token for any parentheses
+			token, pos = string(expr[pos]), pos+1
+		} else if isDigit(expr[pos]) {
 			token, pos = tokenizeNumber(expr, pos)
 		} else if isLetter(expr[pos]) {
 			token, pos = tokenizeVariable(expr, pos)
 		} else if isOperator(string(expr[pos])) {
 			token, pos = tokenizeOperator(expr, pos)
+		} else {
+			// error - invalid character
+			return nil
 		}
 		tokens = append(tokens, token)
 	}
@@ -193,6 +199,10 @@ func evaluatePostfix(expr []string) (types.AstNode, error) {
 		return nil, fmt.Errorf("Error evaluating postfix expression")
 	}
 	return evalStack[0], nil
+}
+
+func isParenthesis(char uint8) bool {
+	return char == '(' || char == ')'
 }
 
 func isOperator(val string) bool {

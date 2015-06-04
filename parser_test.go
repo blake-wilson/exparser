@@ -36,6 +36,15 @@ func TestVariables(t *testing.T) {
 	assert.Equal(t, float64(3072), res.Eval(ctx))
 }
 
+func TestParentheses(t *testing.T) {
+	ctx := types.NewContext()
+	ctx.AssignVariable("x", 7)
+	res, err := EvalExpression("3*(x+2)")
+
+	assert.Equal(t, float64(27), res.Eval(ctx))
+	assert.Nil(t, err)
+}
+
 func TestTokenize(t *testing.T) {
 	tokens := tokenize("3*x + 2")
 	assert.Equal(t, []string{"3", "*", "x", "+", "2"}, tokens)
