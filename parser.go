@@ -21,12 +21,15 @@ var opa = map[string]struct {
 
 // parse an expression and build and AST which can be evaluated
 func EvalExpression(expr string) (types.AstNode, error) {
-	tokens := tokenize(expr)
+	tokens, err := tokenize(expr)
+	if err != nil {
+		return nil, err
+	}
 	tokens = tokenizePostfix(tokens)
 	return evaluatePostfix(tokens)
 }
 
-func tokenize(expr string) []string {
+func tokenize(expr string) ([]string, error) {
 	// values which start with a number will be parsed into number tokens,
 	// values which start with a letter will be parsed into variable
 	// tokens, and variables which are operators will be parsed into
@@ -48,11 +51,11 @@ func tokenize(expr string) []string {
 			token, pos = tokenizeOperator(expr, pos)
 		} else {
 			// error - invalid character
-			return nil
+			return nil, fmt.Errorf("invalid character found while parsing expression")
 		}
 		tokens = append(tokens, token)
 	}
-	return tokens
+	return tokens, nil
 }
 
 func tokenizeNumber(expr string, pos int) (string, int) {
