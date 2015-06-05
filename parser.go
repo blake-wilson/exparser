@@ -61,7 +61,16 @@ func tokenize(expr string) ([]string, error) {
 func tokenizeNumber(expr string, pos int) (string, int) {
 	var res string
 	var i int
-	for i = pos; i < len(expr) && isDigit(expr[i]); i++ {
+	decimalFound := false
+	for i = pos; i < len(expr) && (isDigit(expr[i]) || expr[i] == '.'); i++ {
+		if expr[i] == '.' {
+			if !decimalFound {
+				decimalFound = true
+			} else {
+				// error - cannot have two decimals in same number
+				return res, pos
+			}
+		}
 		res += string(expr[i])
 	}
 	return res, i
